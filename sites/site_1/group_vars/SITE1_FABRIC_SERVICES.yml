@@ -2,6 +2,20 @@
 tenants:
   - name: MY_FABRIC
     vrfs:
+      - name: DEV
+        vrf_id: 100
+        svis:
+          - id: 11
+            name: 'Eleven'
+            tags: [ "Dev" ]
+            enabled: true
+            ip_virtual_router_addresses:
+              - 10.11.11.1
+            nodes:
+              - node: s1-spine1
+                ip_address: 10.11.11.2/24
+              - node: s1-spine2
+                ip_address: 10.11.11.3/24
       - name: default
         svis:
           - id: 10

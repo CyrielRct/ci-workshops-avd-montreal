@@ -273,7 +273,9 @@ vlan internal order ascending range 1006 1199
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
 | 10 | Ten | - |
+| 11 | Eleven | - |
 | 20 | Twenty | - |
+| 3099 | MLAG_iBGP_DEV | LEAF_PEER_L3 |
 | 4093 | LEAF_PEER_L3 | LEAF_PEER_L3 |
 | 4094 | MLAG_PEER | MLAG |
 
@@ -284,8 +286,15 @@ vlan internal order ascending range 1006 1199
 vlan 10
    name Ten
 !
+vlan 11
+   name Eleven
+!
 vlan 20
    name Twenty
+!
+vlan 3099
+   name MLAG_iBGP_DEV
+   trunk group LEAF_PEER_L3
 !
 vlan 4093
    name LEAF_PEER_L3
@@ -450,7 +459,9 @@ interface Loopback0
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
 | Vlan10 | Ten | default | - | False |
+| Vlan11 | Eleven | DEV | - | False |
 | Vlan20 | Twenty | default | - | False |
+| Vlan3099 | MLAG_PEER_L3_iBGP: vrf DEV | DEV | 1500 | False |
 | Vlan4093 | MLAG_PEER_L3_PEERING | default | 1500 | False |
 | Vlan4094 | MLAG_PEER | default | 1500 | False |
 
@@ -459,7 +470,9 @@ interface Loopback0
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | VRRP | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ---- | ------ | ------- |
 | Vlan10 |  default  |  10.10.10.3/24  |  -  |  10.10.10.1  |  -  |  -  |  -  |
+| Vlan11 |  DEV  |  10.11.11.3/24  |  -  |  10.11.11.1  |  -  |  -  |  -  |
 | Vlan20 |  default  |  10.20.20.3/24  |  -  |  10.20.20.1  |  -  |  -  |  -  |
+| Vlan3099 |  DEV  |  10.1.254.1/31  |  -  |  -  |  -  |  -  |  -  |
 | Vlan4093 |  default  |  10.1.254.1/31  |  -  |  -  |  -  |  -  |  -  |
 | Vlan4094 |  default  |  10.1.253.1/31  |  -  |  -  |  -  |  -  |  -  |
 
@@ -473,11 +486,25 @@ interface Vlan10
    ip address 10.10.10.3/24
    ip virtual-router address 10.10.10.1
 !
+interface Vlan11
+   description Eleven
+   no shutdown
+   vrf DEV
+   ip address 10.11.11.3/24
+   ip virtual-router address 10.11.11.1
+!
 interface Vlan20
    description Twenty
    no shutdown
    ip address 10.20.20.3/24
    ip virtual-router address 10.20.20.1
+!
+interface Vlan3099
+   description MLAG_PEER_L3_iBGP: vrf DEV
+   no shutdown
+   mtu 1500
+   vrf DEV
+   ip address 10.1.254.1/31
 !
 interface Vlan4093
    description MLAG_PEER_L3_PEERING
@@ -526,12 +553,14 @@ ip virtual-router mac-address 00:1c:73:00:dc:01
 | VRF | Routing Enabled |
 | --- | --------------- |
 | default | True |
+| DEV | True |
 
 #### IP Routing Device Configuration
 
 ```eos
 !
 ip routing
+ip routing vrf DEV
 ```
 
 ### IPv6 Routing
@@ -542,6 +571,7 @@ ip routing
 | --- | --------------- |
 | default | False |
 | default | false |
+| DEV | false |
 
 ### Static Routes
 
@@ -616,8 +646,11 @@ router ospf 100
 
 | VRF Name | IP Routing |
 | -------- | ---------- |
+| DEV | enabled |
 
 ### VRF Instances Device Configuration
 
 ```eos
+!
+vrf instance DEV
 ```

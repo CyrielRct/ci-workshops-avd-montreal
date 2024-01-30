@@ -27,6 +27,9 @@ local_users:
 vrfs:
 - name: default
   ip_routing: false
+- name: DEV
+  tenant: MY_FABRIC
+  ip_routing: true
 management_interfaces:
 - name: Management0
   description: oob_management
@@ -55,6 +58,14 @@ vlans:
   tenant: MY_FABRIC
 - id: 20
   name: Twenty
+  tenant: MY_FABRIC
+- id: 11
+  name: Eleven
+  tenant: MY_FABRIC
+- id: 3099
+  name: MLAG_iBGP_DEV
+  trunk_groups:
+  - LEAF_PEER_L3
   tenant: MY_FABRIC
 vlan_interfaces:
 - name: Vlan4093
@@ -88,6 +99,24 @@ vlan_interfaces:
   ip_address: 10.20.20.3/24
   ip_virtual_router_addresses:
   - 10.20.20.1
+- name: Vlan11
+  tenant: MY_FABRIC
+  tags:
+  - Dev
+  description: Eleven
+  shutdown: false
+  ip_address: 10.11.11.3/24
+  ip_virtual_router_addresses:
+  - 10.11.11.1
+  vrf: DEV
+- name: Vlan3099
+  tenant: MY_FABRIC
+  type: underlay_peering
+  shutdown: false
+  description: 'MLAG_PEER_L3_iBGP: vrf DEV'
+  vrf: DEV
+  mtu: 1500
+  ip_address: 10.1.254.1/31
 port_channel_interfaces:
 - name: Port-Channel1
   description: MLAG_PEER_s1-spine1_Po1

@@ -131,14 +131,14 @@ port_channel_interfaces:
   type: switched
   shutdown: false
   mode: trunk
-  vlans: '10'
+  vlans: 10-11
   mlag: 2
 - name: Port-Channel4
   description: RACK2_Po2
   type: switched
   shutdown: false
   mode: trunk
-  vlans: '20'
+  vlans: 11,20
   mlag: 4
 ethernet_interfaces:
 - name: Ethernet1

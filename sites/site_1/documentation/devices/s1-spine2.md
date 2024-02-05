@@ -316,10 +316,10 @@ vlan 4094
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
 | Ethernet1 | MLAG_PEER_s1-spine1_Ethernet1 | *trunk | *- | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
-| Ethernet2 | S1-LEAF1_Ethernet3 | *trunk | *10 | *- | *- | 2 |
-| Ethernet3 | S1-LEAF2_Ethernet3 | *trunk | *10 | *- | *- | 2 |
-| Ethernet4 | S1-LEAF3_Ethernet3 | *trunk | *20 | *- | *- | 4 |
-| Ethernet5 | S1-LEAF4_Ethernet3 | *trunk | *20 | *- | *- | 4 |
+| Ethernet2 | S1-LEAF1_Ethernet3 | *trunk | *10-11 | *- | *- | 2 |
+| Ethernet3 | S1-LEAF2_Ethernet3 | *trunk | *10-11 | *- | *- | 2 |
+| Ethernet4 | S1-LEAF3_Ethernet3 | *trunk | *11,20 | *- | *- | 4 |
+| Ethernet5 | S1-LEAF4_Ethernet3 | *trunk | *11,20 | *- | *- | 4 |
 | Ethernet6 | MLAG_PEER_s1-spine1_Ethernet6 | *trunk | *- | *- | *['LEAF_PEER_L3', 'MLAG'] | 1 |
 
 *Inherited from Port-Channel Interface
@@ -393,8 +393,8 @@ interface Ethernet8
 | Interface | Description | Type | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel1 | MLAG_PEER_s1-spine1_Po1 | switched | trunk | - | - | ['LEAF_PEER_L3', 'MLAG'] | - | - | - | - |
-| Port-Channel2 | RACK1_Po2 | switched | trunk | 10 | - | - | - | - | 2 | - |
-| Port-Channel4 | RACK2_Po2 | switched | trunk | 20 | - | - | - | - | 4 | - |
+| Port-Channel2 | RACK1_Po2 | switched | trunk | 10-11 | - | - | - | - | 2 | - |
+| Port-Channel4 | RACK2_Po2 | switched | trunk | 11,20 | - | - | - | - | 4 | - |
 
 #### Port-Channel Interfaces Device Configuration
 
@@ -412,7 +412,7 @@ interface Port-Channel2
    description RACK1_Po2
    no shutdown
    switchport
-   switchport trunk allowed vlan 10
+   switchport trunk allowed vlan 10-11
    switchport mode trunk
    mlag 2
 !
@@ -420,7 +420,7 @@ interface Port-Channel4
    description RACK2_Po2
    no shutdown
    switchport
-   switchport trunk allowed vlan 20
+   switchport trunk allowed vlan 11,20
    switchport mode trunk
    mlag 4
 ```
